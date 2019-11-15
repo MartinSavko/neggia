@@ -209,17 +209,19 @@ void setNFramesPerDataset(H5DataCache* dataCache)
 
 void applyMaskAndTransformToInt32(const H5DataCache* dataCache, const void * indata, int outdata[])
 {
+    constexpr size_t maxSigned8  = (size_t)std::numeric_limits<int8_t>::max();
+    constexpr size_t maxSigned16 = (size_t)std::numeric_limits<int16_t>::max();
+    constexpr size_t maxSigned32 = (size_t)std::numeric_limits<int32_t>::max();
+    
     switch(dataCache->datasize) {
     case 1:
-        constexpr size_t maxSigned8  = (size_t)std::numeric_limits<int8_t>::max();
         applyMaskAndTransformToInt32((const uint8_t*)indata, outdata, dataCache->pixelMask.get(), dataCache->dimx*dataCache->dimy, maxSigned8);
         break;
     case 2:
-        constexpr size_t maxSigned16 = (size_t)std::numeric_limits<int16_t>::max();
+        
         applyMaskAndTransformToInt32((const uint16_t*)indata, outdata, dataCache->pixelMask.get(), dataCache->dimx*dataCache->dimy, maxSigned16);
         break;
     case 4:
-        constexpr size_t maxSigned32 = (size_t)std::numeric_limits<int32_t>::max();
         applyMaskAndTransformToInt32((const uint32_t*)indata, outdata, dataCache->pixelMask.get(), dataCache->dimx*dataCache->dimy, maxSigned32);
         break;
     default: {
